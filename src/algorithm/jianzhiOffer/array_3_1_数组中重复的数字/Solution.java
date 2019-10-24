@@ -1,8 +1,6 @@
 package algorithm.jianzhiOffer.array_3_1_数组中重复的数字;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * https://www.nowcoder.com/questionTerminal/623a5ac0ea5b4e5f95552655361ae0a8
@@ -130,7 +128,7 @@ public class Solution {
     }
 
     //解法六：排序，时间复杂度O(nlogn),空间复杂度O(1)
-    public boolean duplicate(int numbers[],int length,int [] duplication) {
+    public boolean duplicate6(int numbers[],int length,int [] duplication) {
         if (numbers==null || length<=0) {
             return false;
         }
@@ -179,5 +177,80 @@ public class Solution {
         return false;
     }
 
-    //https://www.nowcoder.com/questionTerminal/0b5ae9c4a8c546f79e2547c0179bfdc2
+    //解法八：List,时间复杂度O(n)，空间复杂度O(n)。
+    public boolean duplicate8(int numbers[],int length,int [] duplication) {
+        if (numbers==null || length<=0) {
+            return false;
+        }
+
+        for (int i=0;i<length;i++) {
+            if (numbers[i]<0 || numbers[0]>length-1)
+                return false;
+        }
+
+        List<Integer> list=new ArrayList<>(); //Set同理
+        for ( int i= 0 ; i<length; i++) {
+            if(list.contains(numbers[i])){
+                duplication[0]=numbers[i];
+                return true;
+            }
+            list.add(numbers[i]);
+        }
+
+        return false;
+    }
+
+    //解法九：使用Set，时间复杂度O(n),空间复杂度O(n)
+    public boolean duplicate9(int numbers[],int length,int [] duplication) {
+        if (numbers==null || length<=0) {
+            return false;
+        }
+
+        for (int i=0;i<length;i++) {
+            if (numbers[i]<0 || numbers[0]>length-1)
+                return false;
+        }
+
+        HashSet<Integer> set=new HashSet<Integer>();
+        for(int i=0;i<length;i++){
+            int tmp=set.size();
+            set.add(numbers[i]);
+            if (tmp==set.size()) {
+                duplication[0]=numbers[i];
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //解法十：前提是可以修改原数组中的元素，该算法时间复杂度为O(n)，空间复杂度为O(1)
+    public boolean duplicate(int numbers[],int length,int [] duplication) {
+        if (numbers==null || length<=0) {
+            return false;
+        }
+
+        for (int i=0;i<length;i++) {
+            if (numbers[i]<0 || numbers[0]>length-1)
+                return false;
+        }
+
+        // 1 3 3 2
+        for ( int i= 0 ; i<length; i++) {
+            int index = numbers[i];
+
+            if (index < 0) {
+                index += length;
+            }
+
+            if (numbers[index] < 0) { //该条件成立表明index重复
+                duplication[0]=index;
+                return true;
+            } else {
+                numbers[index] -=length;
+            }
+
+        }
+
+        return false;
+    }
 }
